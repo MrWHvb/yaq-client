@@ -36,6 +36,8 @@ class Tester {
 	run() {
 		console.log('test is running');
 
+		let errors = [];
+
 		// chrome | firefox | internet explorer
 
 		var SELENIUM_HOST = 'http://localhost:4444/wd/hub';
@@ -43,13 +45,13 @@ class Tester {
 
 		var client = new webdriver.Builder()
 		.usingServer(SELENIUM_HOST)
-		.withCapabilities({ browserName: 'firefox' })
+		.withCapabilities({ browserName: 'chrome' })
 		.build();
 
 		client.get(URL).then(function() {
 
 			client.findElement({ name: 'texweft' }).then(null, err => {
-				console.log(typeof err);
+				console.log(err.message);
 			})
 
 			// client.findElement({ name: 'texweft' }).sendKeys('test');
