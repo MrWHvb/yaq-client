@@ -44,7 +44,14 @@ module.exports =  {
 			console.log(data);
 			this.status = 'busy';
 
-			tester.run();
+			tester.run(testreport => {
+				this.$socket.emit('yaq.client:finished-test', testreport);
+				console.log('Send test report... Done.');
+			});
+		}
+
+		this.$options.sockets['yaq.server:saved-test'] = link => {
+			console.log(link);
 		}
 	}
 }
