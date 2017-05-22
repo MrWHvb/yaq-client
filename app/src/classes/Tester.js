@@ -50,43 +50,7 @@ class Tester {
 		.withCapabilities({ browserName: 'chrome' })
 		.build();
 
-		client.get(URL).then(async function() {
-
-			report.newBlock('block1', 'test description 1');
-
-			await client.findElement({ name: 'texweft' }).then(null, err => {
-				// console.log(1);
-				report.error('click on button 1', err)
-				// console.log(2);
-			});
-
-			// console.log(3);
-			//
-			report.newBlock('block2', 'test description 2');
-			await client.findElement({ name: 'sdvfwe' }).then(null, err => {
-				// console.log(4);
-				report.error('click on button 2', err)
-				// console.log(5);
-			});
-
-			// console.log(6);
-			//
-			report.newBlock('block3', 'test description 3');
-			await client.findElement({ name: 'tex234523weft' }).then(null, err => {
-				// console.log(7);
-				report.error('click on button 3', err)
-				// console.log(8);
-			});
-
-			// console.log(9);
-			await client.quit().then(() => {
-				// console.log('Browser are successfully closed');
-				// console.log(10);
-				console.log(report.testStack());
-				// cb(report.results())
-				cb(report.testStack());
-			});
-		});
+		// TODO: run virtual script with some context
 	}
 }
 

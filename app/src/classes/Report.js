@@ -23,6 +23,11 @@ class Report {
 	}
 
 	success(string) {
+		this._block.results.push({
+			action: string,
+			success: true,
+			error: null
+		})
 		console.log(this._block);
 	}
 
@@ -30,7 +35,11 @@ class Report {
 		this._block.results.push({
 			action: string,
 			success: false,
-			error: err
+			error: {
+				message: err.message.split('\n'),
+				name: err.name,
+				stack: err.stack.split('\n')
+			}
 		})
 		console.log(this._block);
 	}
