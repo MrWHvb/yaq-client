@@ -19,7 +19,7 @@
 			</div>
 		</div>
 
-		<test-results :results='testResults'></test-results>
+		<test-results></test-results>
 	</div>
 </template>
 
@@ -36,7 +36,6 @@ module.exports =  {
 				site: null
 			},
 			messages: [],
-			testResults: null,
 			testsList: [],
 			testName: ''
 		}
@@ -76,20 +75,6 @@ module.exports =  {
 				this.$socket.emit('yaq.client:finished-test', testreport);
 				console.log('Send test report... Done.');
 			});
-		}
-
-		this.$options.sockets['yaq.server:saved-test'] = link => {
-			console.log(link);
-
-			this.status = 'free';
-
-			this.$http.get(`http://193.70.37.135:506/${link}`).then(response => {
-				console.log(response);
-				this.testResults = response.body;
-			}, err => {
-				console.log(err);
-				this.messages = err
-			})
 		}
 
 		// get list of available tests

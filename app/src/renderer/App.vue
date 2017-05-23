@@ -11,6 +11,9 @@
 				<li>
 					<router-link to='/test-runner'>Test runner</router-link>
 				</li>
+				<li>
+					<router-link to='/history'>Test history</router-link>
+				</li>
 			</ul>
 		</nav>
 		<router-view>qwdqwd</router-view>

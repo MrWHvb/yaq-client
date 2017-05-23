@@ -10,5 +10,9 @@ module.exports = [
 	{
 		path: '/test-runner',
 		component: require('./components/TestRunner.vue')
+	},
+	{
+		path: '/history',
+		component: require('./components/History.vue')
 	}
 ]

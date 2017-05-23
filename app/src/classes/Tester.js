@@ -1,5 +1,14 @@
+const vm = require('vm');
+
 const webdriver = require('selenium-webdriver');
 const selenium = require('selenium-standalone');
+
+const logging = require('selenium-webdriver/lib/logging');
+const until = require('selenium-webdriver/lib/until');
+
+console.log(logging);
+
+// console.log(webdriver);
 
 const Report = require('./Report.js');
 
@@ -35,22 +44,102 @@ class Tester {
 		});
 	}
 
-	run(cb) {
+	async run(test, browsers, cb) {
 		console.log('test is running');
 
-		let report = new Report();
+		let report = [];
 
-		// chrome | firefox | internet explorer
+		async function testInBrowser(browser) {
+			let report = new Report();
 
-		var SELENIUM_HOST = 'http://localhost:4444/wd/hub';
-		var URL = 'http://www.google.com.ua';
+			// chrome | firefox | internet explorer
 
-		var client = new webdriver.Builder()
-		.usingServer(SELENIUM_HOST)
-		.withCapabilities({ browserName: 'chrome' })
-		.build();
+			var SELENIUM_HOST = 'http://localhost:4444/wd/hub';
 
-		// TODO: run virtual script with some context
+			var client = new webdriver.Builder()
+			.usingServer(SELENIUM_HOST)
+			.withCapabilities({ browserName: browser })
+			.build();
+
+			client.get('http://happy-horse.web1.com.ua/').then(async function() {
+
+				report.newBlock('Головна сторінка', 'Перевірка функціоналу мовних версій');
+
+				await client.findElement({ css: '.yam-langselect-area .yam-lang-en' }).then(async (el) => {
+					await el.click().then(() => {
+						report.success('Перехід на англійську версію')
+					});
+				}, err => {
+					report.error('Перехід на англійську версію', err)
+				});
+
+				await client.wait(until.elementLocated({css: '#loader'}), 10000);
+
+				// await assert.contains('en', client.getCurrentUrl()).then(() => {
+				// 	report.success('Перехід на англійську версію здійснений')
+				// }, err => {
+				// 	report.error('Перехід на англійську версію', err)
+				// })
+
+
+				await client.quit().then(() => {
+					// stack = report.testStack();
+				});
+			});
+
+			client.manage().logs().get(logging.Type.BROWSER).then(function(entries) {
+				entries.forEach(function(entry) {
+					console.log('[%s] %s', entry.level.name, entry.message);
+				});
+			});
+
+
+
+			// try {
+			// 	const script = new vm.Script(test.code);
+			//
+			// 	const sandbox = {
+			// 		console,
+			// 		client,
+			// 		report,
+			// 		stack: null,
+			// 		until: webdriver.until,
+			// 		assert: webdriver.assert
+			// 	}
+			//
+			// 	const context = new vm.createContext(sandbox)
+			//
+			// 	// console.log(sandbox);
+			//
+			// 	await script.runInContext(context);
+			//
+			// 	// console.log(sandbox);
+			//
+			// 	return sandbox.stack;
+			// }
+			// catch(e) {
+			// 	await client.quit().then(() => {
+			// 		alert(`Error when run user test: "${e}".\nPlease, check test code!`);
+			// 	});
+			//
+			// 	return false;
+			// }
+		}
+
+		for (var browser in browsers) {
+			if (browsers.hasOwnProperty(browser)) {
+				// console.log(browser, browsers[browser]);
+				if(browsers[browser]) {
+					report.push({
+						browser,
+						testName: test.name,
+						report: await testInBrowser(browser)
+					})
+				}
+			}
+		}
+
+		cb(report);
 	}
 }
 

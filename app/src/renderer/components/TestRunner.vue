@@ -12,15 +12,15 @@
 					<li>
 						<label>Firefox: <input type="checkbox" v-model='browsers.firefox'></label>
 					</li>
+					<!-- <li>
+						<label>Opera: <input type="checkbox" v-model='browsers["opera chromium"]'></label>
+					</li> -->
 					<li>
-						<label>Opera: <input type="checkbox" v-model='browsers.opera'></label>
+						<label>IE: <input type="checkbox" v-model='browsers["internet explorer"]'></label>
 					</li>
-					<li>
-						<label>IE: <input type="checkbox" v-model='browsers.ie'></label>
-					</li>
-					<li>
+					<!-- <li>
 						<label>Edge: <input type="checkbox" v-model='browsers.edge'></label>
-					</li>
+					</li> -->
 				</ul>
 
 				Choosed test: <b>{{testName}}</b>
@@ -32,6 +32,8 @@
 				<tests-list :name='testName'></tests-list>
 			</div>
 		</div>
+
+		<test-results></test-results>
 	</div>
 </template>
 
@@ -44,9 +46,9 @@ module.exports = {
 			browsers: {
 				chrome: false,
 				firefox: false,
-				opera: false,
-				ie: false,
-				edge: false
+				// 'opera chromium': false,
+				'internet explorer': false,
+				// edge: false
 			},
 			testName: '',
 			testCode: ''
@@ -54,17 +56,31 @@ module.exports = {
 	},
 
 	components: {
-		'tests-list': require('./subcomponents/testsList.vue')
+		'tests-list': require('./subcomponents/testsList.vue'),
+		'test-results': require('./subcomponents/testResults.vue')
 	},
 
 	methods: {
 		runTest() {
-			let test = new Tester();
+			if(
+				!this.browsers.chrome && !this.browsers.firefox /*&& !this.browsers['opera chromium']*/
+				&& !this.browsers['internet explorer'] /*&& !this.browsers.edge*/
+			) {
+				alert('Please, choose at least one browser for test!')
+			}
+			else {
+				if(this.testName == '') {
+					alert('Please, choose test name from list!')
+				}
+				else {
+					let test = new Tester();
 
-			test.run(testreport => {
-				this.$socket.emit('yaq.client:finished-test', testreport);
-				console.log('Send test report... Done.');
-			});
+					test.run({name: this.testName, code: this.testCode}, this.browsers, testreport => {
+						this.$socket.emit('yaq.client:finished-test', testreport);
+						console.log('Send test report... Done.');
+					});
+				}
+			}
 		}
 	},
 
