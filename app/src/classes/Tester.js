@@ -3,10 +3,6 @@ const vm = require('vm');
 const webdriver = require('selenium-webdriver');
 const selenium = require('selenium-standalone');
 
-const logging = require('selenium-webdriver/lib/logging');
-const until = require('selenium-webdriver/lib/until');
-
-console.log(logging);
 
 // console.log(webdriver);
 
@@ -61,69 +57,36 @@ class Tester {
 			.withCapabilities({ browserName: browser })
 			.build();
 
-			client.get('http://happy-horse.web1.com.ua/').then(async function() {
+			try {
+				const script = new vm.Script(test.code);
 
-				report.newBlock('Головна сторінка', 'Перевірка функціоналу мовних версій');
+				const sandbox = {
+					console,
+					client,
+					// report,
+					stack: null,
+					logging: require('selenium-webdriver/lib/logging'),
+					until: require('selenium-webdriver/lib/until'),
+					WebElementPromise: webdriver.WebElementPromise
+				}
 
-				await client.findElement({ css: '.yam-langselect-area .yam-lang-en' }).then(async (el) => {
-					await el.click().then(() => {
-						report.success('Перехід на англійську версію')
-					});
-				}, err => {
-					report.error('Перехід на англійську версію', err)
-				});
+				const context = new vm.createContext(sandbox)
 
-				await client.wait(until.elementLocated({css: '#loader'}), 10000);
+				// console.log(sandbox);
 
-				// await assert.contains('en', client.getCurrentUrl()).then(() => {
-				// 	report.success('Перехід на англійську версію здійснений')
-				// }, err => {
-				// 	report.error('Перехід на англійську версію', err)
-				// })
+				await script.runInContext(context);
 
+				// console.log(sandbox);
 
+				return sandbox.stack;
+			}
+			catch(e) {
 				await client.quit().then(() => {
-					// stack = report.testStack();
+					alert(`Error when run user test: "${e}".\nPlease, check test code!`);
 				});
-			});
 
-			client.manage().logs().get(logging.Type.BROWSER).then(function(entries) {
-				entries.forEach(function(entry) {
-					console.log('[%s] %s', entry.level.name, entry.message);
-				});
-			});
-
-
-
-			// try {
-			// 	const script = new vm.Script(test.code);
-			//
-			// 	const sandbox = {
-			// 		console,
-			// 		client,
-			// 		report,
-			// 		stack: null,
-			// 		until: webdriver.until,
-			// 		assert: webdriver.assert
-			// 	}
-			//
-			// 	const context = new vm.createContext(sandbox)
-			//
-			// 	// console.log(sandbox);
-			//
-			// 	await script.runInContext(context);
-			//
-			// 	// console.log(sandbox);
-			//
-			// 	return sandbox.stack;
-			// }
-			// catch(e) {
-			// 	await client.quit().then(() => {
-			// 		alert(`Error when run user test: "${e}".\nPlease, check test code!`);
-			// 	});
-			//
-			// 	return false;
-			// }
+				return false;
+			}
 		}
 
 		for (var browser in browsers) {
@@ -140,6 +103,7 @@ class Tester {
 		}
 
 		cb(report);
+		console.log(`Report: ${report}`);
 	}
 }
 
