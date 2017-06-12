@@ -12,32 +12,13 @@
 			</div>
 
 			<div class="report">
-				<div class="block-of-test" v-for='(block, i) in browser.report'>
-					<div class="block-name">{{block.name}}</div>
-					<div class="block-description">{{block.description}}</div>
-					<div class="block-results">
-						<div class="result" :success='`${result.success}`' v-for='(result, j) in block.results'>
-							<div class="action">Action: {{result.action}}</div>
-							<div class="success">Success: <b>{{result.success}}</b></div>
-							<div class="error" v-if='result.error'>
-								<div class="name">Error name: <b>{{result.error.name}}</b></div>
-								<div class="message">
-									<input type="checkbox" :id='`err-${k}-${i}-${j}`'>
-									<label :for='`err-${k}-${i}-${j}`'>Error message:</label>
-									<div class="hidden-message">
-										<pre>{{result.error.message}}</pre>
-									</div>
-								</div>
-								<div class="stack">
-									<input type="checkbox" :id='`stack-${k}-${i}-${j}`'>
-									<label :for='`stack-${k}-${i}-${j}`'>Error stack:</label>
-									<div class="hidden-message">
-										<pre>{{result.error.stack}}</pre>
-									</div>
-								</div>
-							</div>
-						</div>
+				<div class="block-of-test" :tpl='block.level.toLowerCase()' v-for='(block, i) in browser.report'>
+					<div class="timestamp">
+						{{time1(block.timestamp)}}
+						<b>({{time2(block.timestamp)}})</b>
 					</div>
+					<div class="level">Level: {{block.level}}</div>
+					<div class="message"><pre>{{block.message}}</pre></div>
 				</div>
 			</div>
 		</div>
@@ -45,10 +26,21 @@
 </template>
 
 <script>
+const moment = require('moment');
+
 module.exports = {
 	data() {
 		return {
 			results: null
+		}
+	},
+
+	methods: {
+		time1(ms) {
+			return moment(ms).format('HH:mm:ss');
+		},
+		time2(ms) {
+			return moment(ms).format('dddd, DD.MM.YYYY');
 		}
 	},
 
@@ -127,94 +119,33 @@ module.exports = {
 			display: none;
 
 			.block-of-test {
-				background-color: rgba(#aaa, .3);
 				margin: 0 0 20px;
 				padding: 10px;
 
-				.block-name {
-					font-weight: 700;
-					text-transform: uppercase;
-					// font-size: 20px;
-					margin: 0 0 10px;
+				&[tpl='info'] {
+					background-color: rgba(#aaa, .3);
 				}
 
-				.block-description {
-					margin: 0 0 10px;
+				&[tpl='warning'] {
+					background-color: rgba(red, .3);
 				}
 
-				.block-results {
+				.timestamp {
+					margin: 0 0 10px;
 
-					.result {
-						padding: 10px 10px 5px;
-						margin: 0 0 10px;
+					b {
+						font-size: 12px;
+					}
+				}
 
-						&[success='true'] {
-							background-color: rgba(green, .1);
-						}
+				.level {
 
-						&[success='false'] {
-							background-color: rgba(red, .1);
-						}
+				}
 
-						.action {
-							margin: 0 0 10px;
-						}
+				.message {
 
-						.success {
-							margin: 0 0 10px;
-						}
-
-						.error {
-
-							.name {
-								margin: 0 0 10px;
-							}
-
-							.message, .stack {
-								margin: 0 0 10px;
-
-								input {
-									display: none;
-
-									&:checked {
-										& ~ label {
-											&:after {
-												content: '-';
-											}
-										}
-
-										& ~ .hidden-message {
-											display: block;
-										}
-									}
-								}
-
-								label {
-									display: flex;
-									align-items: center;
-									cursor: pointer;
-
-									&:after {
-										content: '+';
-										display: block;
-										font-size: 18px;
-										padding: 0 10px;
-									}
-								}
-
-								.hidden-message {
-									display: none;
-									max-width: 100%;
-									overflow: auto;
-
-									pre {
-										display: block;
-										width: 100%;
-										// white-space: pre-wrap;
-									}
-								}
-							}
-						}
+					pre {
+						white-space: pre-wrap;
 					}
 				}
 			}

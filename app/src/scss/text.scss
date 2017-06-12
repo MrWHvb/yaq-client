@@ -1,0 +1,40 @@
+@import "./_wanted.scss";
+
+h1, .h1 {
+	font-size: rem(30);
+	font-weight: normal;
+}
+
+h2, .h2 {
+	font-size: rem(26);
+	font-weight: normal;
+}
+
+h3, .h3 {
+	font-size: rem(22);
+	font-weight: normal;
+}
+
+h4, .h4 {
+	font-size: rem(18);
+	font-weight: normal;
+}
+
+h5, .h5 {
+	font-size: rem(14);
+	font-weight: normal;
+	text-transform: uppercase;
+}
+
+h6, .h6 {
+	font-size: rem(10);
+	font-weight: normal;
+	text-transform: uppercase;
+}
+
+
+.content-area {
+	p {
+		margin: 0 0 rem(10);
+	}
+}
