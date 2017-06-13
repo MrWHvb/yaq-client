@@ -63,22 +63,38 @@ class Tester {
                 const sandbox = {
                     console,
                     client,
+                    webdriver,
                     // report,
                     stack: null,
                     logging: require('selenium-webdriver/lib/logging'),
                     until: require('selenium-webdriver/lib/until'),
                     WebElementPromise: webdriver.WebElementPromise,
-                    Do: {
-                        click: (element) => {
-                            if (element instanceof webdriver.WebElementPromise) {
-                                element.click();
+                    Sleep: {
+                        sleep: function(time) {
+                            var setTime = new Date().getTime();
+                            for (var i = 0; i < 1e7; i++) {
+                                if ((new Date().getTime() - setTime) > time) {
+                                    break;
+                                }
                             }
-                        },
-                        lkjnkjn: kjjh => {
-
                         }
-                    }
+                    },
+
+                    // Do: {
+                    //     click: function(element, path) {
+                    //         client.findElement({ css: path })
+                    //         element.click().catch(err => err);
+
+                    //     },
+                    //     enterText: (element, value) => {
+                    //         if (element instanceof new webdriver.WebElementPromise()) {
+                    //             element.sendKeys(value);
+                    //         }
+                    //     }
+                    // }
                 }
+
+
 
                 const context = new vm.createContext(sandbox)
 
