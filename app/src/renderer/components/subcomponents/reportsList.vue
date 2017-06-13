@@ -1,7 +1,7 @@
 <template lang="html">
 	<div id="reports-list">
 		<ul>
-			<li v-for='report in list' @click='liClick(report)' :class='report == currentReport ? "active" : false'>
+			<li v-for="report in orderedList" @click='liClick(report)' :class='report == currentReport ? "active" : false'>
 				<span class="name">{{report}}</span>
 				<span class="date">({{fileDate(report)}})</span>
 			</li>
@@ -11,11 +11,19 @@
 </template>
 
 <script>
+const _ = require('lodash');
+
 module.exports = {
 	data() {
 		return {
 			list: null,
 			currentReport: ''
+		}
+	},
+	
+	computed : {
+		orderedList() {
+			return this.list ? this.list.reverse() : [];
 		}
 	},
 
