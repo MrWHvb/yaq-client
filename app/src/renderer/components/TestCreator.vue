@@ -13,7 +13,7 @@
 				</div>
 				
 				<div class="controls">
-					<input type="text" v-model='name' placeholder="Test name...">
+					<input type="text" @input='setTestName($event)' v-model='name' placeholder="Test name...">
 					
 					<input type="checkbox" @change='overwriteFlag($event)' v-model='overwrite' id='overwrite'>
 					<label for='overwrite'>Overwrite</label>
@@ -71,6 +71,12 @@ module.exports = {
 	},
 	
 	methods: {
+		setTestName(e) {
+			this.$store.commit('setCurrentTest', {
+				name: e.target.value,
+				code: this.code
+			})
+		},
 		overwriteFlag(e) {
 			this.$store.commit('setRewriteFlag', e.target.checked);
 		},
