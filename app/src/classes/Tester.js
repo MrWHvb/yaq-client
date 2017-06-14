@@ -79,19 +79,17 @@ class Tester {
                             }
                         }
                     },
+                    Tab: {
+                        openInNewTab: function(url) {
+                            // var win = window.open(url);
+                            let a = document.createElement('a');
+                            a.href = url;
+                            a.target = '_blank';
+                            a.click();
+                            //window.focus();
 
-                    // Do: {
-                    //     click: function(element, path) {
-                    //         client.findElement({ css: path })
-                    //         element.click().catch(err => err);
-
-                    //     },
-                    //     enterText: (element, value) => {
-                    //         if (element instanceof new webdriver.WebElementPromise()) {
-                    //             element.sendKeys(value);
-                    //         }
-                    //     }
-                    // }
+                        }
+                    }
                 }
 
 
