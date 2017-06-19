@@ -12,7 +12,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 let rendererConfig = {
 	devtool: '#eval-source-map',
-	devServer: { overlay: true },
+	devServer: { 
+		overlay: true,
+		contentBase: ['app/src/']
+	},
 	entry: {
 		renderer: path.join(__dirname, 'app/src/renderer/main.js')
 	},
@@ -23,7 +26,18 @@ let rendererConfig = {
 				test: /\.s?css$/,
 				use: ExtractTextPlugin.extract({
 					fallback: 'style-loader',
-					use: 'css-loader!sass-loader'
+					use: [
+						{
+							loader: 'css-loader',
+							options: {
+								url: false
+							}
+						},
+						{
+							loader: 'sass-loader'
+						}
+					]
+					// use: 'css-loader!sass-loader',
 				})
 			},
 			// {
@@ -70,16 +84,17 @@ let rendererConfig = {
 					}
 				}
 			},
-			{
-				test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-				use: {
-					loader: 'url-loader',
-					query: {
-						limit: 10000,
-						name: 'fonts/[name].[ext]'
-					}
-				}
-			}
+			// {
+			// 	test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+			// 	// use: 'ignore-loader'
+			// 	use: {
+			// 		loader: 'url-loader',
+			// 		query: {
+			// 			limit: 10000,
+			// 			name: 'fonts/[name].[ext]'
+			// 		}
+			// 	}
+			// }
 		]
 	},
 	plugins: [

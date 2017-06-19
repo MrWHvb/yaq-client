@@ -1,7 +1,5 @@
 <template lang="html">
 	<div id="tests-list">
-		<h3>List of available tests</h3>
-
 		<input type="text" v-model='searchText' placeholder='Search'>
 
 		<ul>
@@ -11,8 +9,9 @@
 					:class='name == test.replace(".code", "") ? "active" : ""'
 			>
 			<span>{{test.replace('.code', '')}}</span>
+			
 			<div class="ctrl">
-				<div class="remove" title="remove"></div>
+				<div class="remove" @click='removeTest($event)' title="remove"></div>
 			</div>
 		</li>
 	</ul>
@@ -45,6 +44,21 @@ module.exports = {
 			let name = e.target.getAttribute('file');
 
 			this.$socket.emit('yaq.client:get-test-by-name', name);
+		},
+		
+		removeTest(e) {
+			let filename = e.target.parentElement.parentElement.getAttribute('file');
+			let testname = filename.replace(/\.code$/, '');
+			
+			let flag = confirm(`Removing test "${testname}".\nAre you sure?`);
+			
+			if(flag) {
+				console.log(filename);
+				this.$socket.emit('yaq.client:remove-test-by-name', filename)
+			}
+			else {
+				console.log('qwdqw');
+			}
 		}
 	},
 
@@ -55,6 +69,11 @@ module.exports = {
 			// console.log(list);
 			this.$store.commit('updateTestsList', list);
 		}
+		
+		this.$options.sockets['yaq.server:test-is-removed'] = name => {
+			// console.log(list);
+			alert(`Test "${name}" is removed`);
+		}
 	}
 }
 </script>
@@ -64,7 +83,7 @@ module.exports = {
 
 #tests-list {
 	input {
-		height: 30px;
+		height: 43px;
 		display: block;
 		width: 100%;
 		padding: 0 10px;
@@ -96,6 +115,7 @@ module.exports = {
 				font-size: 12px;
 				display: block;
 				line-height: 15px;
+				pointer-events: none;
 			}
 			
 			.ctrl {
@@ -106,8 +126,20 @@ module.exports = {
 				width: 20px;
 				background-color: rgba(red, .1);
 				display: flex;
+				align-items: center;
+				justify-content: center;
+				
+				&:hover {
+					
+					.remove {
+						opacity: 1;
+					}
+				}
 				
 				.remove {
+					@include single-transition;
+					opacity: 0.1;
+					
 					&:after {
 						@include fa($fa-times);
 					}

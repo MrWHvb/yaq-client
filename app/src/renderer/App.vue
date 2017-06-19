@@ -34,7 +34,7 @@
 		<div id="bottom-wrapper">
 			<div class="row">
 				<div class="cols s_24">
-					footer
+					
 				</div>
 			</div>
 		</div>
@@ -48,7 +48,11 @@ require('../scss/fonts.scss');
 require('../scss/awesome.scss');
 
 module.exports =  {
-	store: require('./vuex/store.js')
+	store: require('./vuex/store.js'),
+	
+	components: {
+		statusbar: require('./components/Statusbar.vue')
+	}
 }
 </script>
 

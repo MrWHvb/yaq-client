@@ -3,8 +3,6 @@
 		
 		<div class="row">
 			<div class="cols s_20">
-				<h3>Editor</h3>
-				
 				<div class="save-error" v-if='saveError'>
 					<!-- <pre>{{saveError}}</pre> -->
 					<div v-show='saveError.code == "EEXIST"'>
