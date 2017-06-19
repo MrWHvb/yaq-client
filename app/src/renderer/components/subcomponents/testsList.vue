@@ -10,7 +10,10 @@
 					@click.self='loadTest($event)'
 					:class='name == test.replace(".code", "") ? "active" : ""'
 			>
-			{{test.replace('.code', '')}}
+			<span>{{test.replace('.code', '')}}</span>
+			<div class="ctrl">
+				<div class="remove" title="remove"></div>
+			</div>
 		</li>
 	</ul>
 </div>
@@ -57,6 +60,8 @@ module.exports = {
 </script>
 
 <style lang="scss">
+@import "../../../scss/wanted";
+
 #tests-list {
 	input {
 		height: 30px;
@@ -72,11 +77,12 @@ module.exports = {
 		margin: 0;
 
 		li {
-			padding: 5px;
+			padding: 10px 20px 10px 10px;
 			background-color: #eee;
 			margin: 0 0 5px;
 			cursor: pointer;
 			transition: all 300ms ease 0ms;
+			position: relative;
 
 			&:hover {
 				background-color: darken(#eee, 7%);
@@ -84,6 +90,28 @@ module.exports = {
 
 			&.active {
 				background-color: darken(#eee, 12%);
+			}
+			
+			span {
+				font-size: 12px;
+				display: block;
+				line-height: 15px;
+			}
+			
+			.ctrl {
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				width: 20px;
+				background-color: rgba(red, .1);
+				display: flex;
+				
+				.remove {
+					&:after {
+						@include fa($fa-times);
+					}
+				}
 			}
 		}
 	}

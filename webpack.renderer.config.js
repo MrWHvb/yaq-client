@@ -102,7 +102,7 @@ let rendererConfig = {
 		alias: {
 			'components': path.join(__dirname, 'app/src/renderer/components'),
 			'renderer': path.join(__dirname, 'app/src/renderer'),
-			'SCSS': path.join(__dirname, 'app/src/renderer/scss')
+			'SCSS': path.join(__dirname, 'app/src/scss')
 		},
 		extensions: ['.js', '.vue', '.json', '.css', '.node', '.scss'],
 		modules: [
