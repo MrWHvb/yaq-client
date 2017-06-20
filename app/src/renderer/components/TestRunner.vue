@@ -1,45 +1,52 @@
 <template lang="html">
 	<div id="test-runner">
-		<h1>Test runner</h1>
 
-		<div class="wrapper">
-			<div class="browsers">
-				<div class="header">Choose browsers for testing:</div>
-				
-				<ul>
-					<li>
-						<input type="checkbox" @change='checkBrowser($event)' v-model='browsers.chrome' id='chrome'>
-						<label for='chrome'>Chrome</label>
-					</li>
-					<li>
-						<input type="checkbox" @change='checkBrowser($event)' v-model='browsers.firefox' id='firefox'>
-						<label for='firefox'>Firefox</label>
-					</li>
-					<!-- <li>
-						<label>Opera: <input type="checkbox" v-model='browsers["opera chromium"]'></label>
-					</li> -->
-					<li>
-						<input type="checkbox" @change='checkBrowser($event)' v-model='browsers["internet explorer"]' id='ie'>
-						<label for='ie'>IE</label>
-					</li>
-					<!-- <li>
-						<label>Edge: <input type="checkbox" v-model='browsers.edge'></label>
-					</li> -->
-				</ul>
+		<div class="row">
+			<div class="cols s_24">
+				<div class="wrapper">
+					<div class="browsers">
+						<div class="header">Choose browsers for testing:</div>
+						
+						<ul>
+							<li>
+								<input type="checkbox" @change='checkBrowser($event)' v-model='browsers.chrome' id='chrome'>
+								<label for='chrome'>Chrome</label>
+							</li>
+							<li>
+								<input type="checkbox" @change='checkBrowser($event)' v-model='browsers.firefox' id='firefox'>
+								<label for='firefox'>Firefox</label>
+							</li>
+							<!-- <li>
+								<label>Opera: <input type="checkbox" v-model='browsers["opera chromium"]'></label>
+							</li> -->
+							<li>
+								<input type="checkbox" @change='checkBrowser($event)' v-model='browsers["internet explorer"]' id='ie'>
+								<label for='ie'>IE</label>
+							</li>
+							<!-- <li>
+								<label>Edge: <input type="checkbox" v-model='browsers.edge'></label>
+							</li> -->
+						</ul>
 
-				<div class="header">
-					Choosed test: <b>{{testName}}</b>
+						<div class="header">
+							Choosed test: <b>{{testName}}</b>
+						</div>
+
+						<button type="button" @click='runTest'>run test</button>
+					</div>
+
+					<div class="tests">
+						<tests-list :name='testName'></tests-list>
+					</div>
 				</div>
-
-				<button type="button" @click='runTest'>run test</button>
-			</div>
-
-			<div class="tests">
-				<tests-list :name='testName'></tests-list>
 			</div>
 		</div>
 
-		<test-results></test-results>
+		<div class="row">
+			<div class="cols s_24">
+				<test-results></test-results>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -128,6 +135,7 @@ module.exports = {
 
 <style lang="scss">
 #test-runner {
+	width: 100%;
 
 	.wrapper {
 		display: flex;
