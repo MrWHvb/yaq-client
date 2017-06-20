@@ -19,7 +19,9 @@
 			</div>
 		</div>
 
-		<test-results></test-results>
+		<div style="position: relative">
+			<test-results></test-results>
+		</div>
 	</div>
 </template>
 

@@ -1,19 +1,24 @@
 <template lang="html">
 	<div id="reports-list">
-		<ul>
-			<li v-for="report in orderedList" @click='liClick(report)' :class='report == currentReport ? "active" : false'>
-				<span class="name">{{report}}</span>
-				<span class="date">({{fileDate(report)}})</span>
-			</li>
-		</ul>
-		<!-- <pre>{{list}}</pre> -->
+		<div class="search">
+			<input type="text">
+		</div>
+		
+		<div class="list">
+			<ul>
+				<li v-for="report in orderedList" @click='liClick(report)' :class='report == currentReport ? "active" : false'>
+					<span class="name">{{report}}</span>
+					<span class="date">({{fileDate(report)}})</span>
+				</li>
+			</ul>
+		</div>
 	</div>
 </template>
 
 <script>
 const _ = require('lodash');
 
-module.exports = {
+module.exports = { 
 	data() {
 		return {
 			list: null,
@@ -29,7 +34,7 @@ module.exports = {
 
 	methods: {
 		liClick(file) {
-			console.log(file);
+			// console.log(file);
 			this.$socket.emit('yaq.client:get-report-by-name', file);
 			this.currentReport = file;
 		},
@@ -63,27 +68,55 @@ module.exports = {
 
 <style lang="scss">
 #reports-list {
+	background-color: rgba(yellow, .2);
+	// flex: 1 1 auto;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	
+	.search {
+		margin: 0 0 20px;
+		flex: 0 0 auto;
+		
+		input {
+			height: 35px;
+		}
+	}
+	
+	.list {
+		background-color: rgba(red, .1);
+		flex: 1 1 auto;
+		max-height: 100%;
+		position: relative;
+		
+		ul {
+			padding: 0;
+			margin: 0;
+			list-style-type: none;
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			overflow: auto;
 
-	ul {
-		padding: 0;
-		margin: 0;
-		list-style-type: none;
+			li {
+				// display: none;
+				padding: 5px;
+				cursor: pointer;
+				transition: all 300ms ease 0ms;
 
-		li {
-			padding: 5px;
-			cursor: pointer;
-			transition: all 300ms ease 0ms;
+				&:hover, &.active {
+					background-color: rgba(blue, .1);
+				}
 
-			&:hover, &.active {
-				background-color: rgba(blue, .1);
-			}
+				.name {
+					font-size: 14px;
+				}
 
-			.name {
-				font-size: 14px;
-			}
-
-			.date {
-				font-size: 12px;
+				.date {
+					font-size: 12px;
+				}
 			}
 		}
 	}

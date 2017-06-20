@@ -12,13 +12,17 @@
 			</div>
 
 			<div class="report">
-				<div class="block-of-test" :tpl='block.level.toLowerCase()' v-for='(block, i) in browser.report'>
-					<div class="timestamp">
-						{{time1(block.timestamp)}}
-						<b>({{time2(block.timestamp)}})</b>
+				<div class="row">
+					<div v-for='(block, i) in browser.report' :class='className(browser.report[i], browser.report[i-1])'>
+						<div class="block-of-test" :tpl='block.level.toLowerCase()'>
+							<div class="timestamp"> 
+								{{time1(block.timestamp)}}
+								<b>({{time2(block.timestamp)}})</b>
+							</div>
+							<div class="type">Level: {{block.level}}</div>
+							<div class="message"><pre>{{block.message}}</pre></div>
+						</div>
 					</div>
-					<div class="level">Level: {{block.level}}</div>
-					<div class="message"><pre>{{block.message}}</pre></div>
 				</div>
 			</div>
 		</div>
@@ -41,22 +45,22 @@ module.exports = {
 		},
 		time2(ms) {
 			return moment(ms).format('dddd, DD.MM.YYYY');
+		},
+		
+		className(block1, block2) {
+			if(block2) {
+				// console.log(block);
+				if(block1.level == "WARNING" && block2.level == "WARNING") return "cols s_24";
+				else return "cols s_12"
+			}
+			return "cols s_12"
+			// (browser.report[i-1] ? browser.report[i-1].level : false) == "WARNING" ? "cols s_24" : "cols s_12"
 		}
 	},
 
 	mounted() {
-		this.$options.sockets['yaq.server:show-test-report'] = link => {
-			console.log(link);
-
-			// this.status = 'free';
-
-			this.$http.get(`http://193.70.37.135:506/${link}`).then(response => {
-				console.log(response);
-				this.results = response.body;
-			}, err => {
-				console.log(err);
-				// this.messages = err
-			})
+		this.$options.sockets['yaq.server:show-test-report'] = object => {
+			this.results = object;
 		}
 	}
 }
@@ -64,6 +68,12 @@ module.exports = {
 
 <style lang="scss">
 .test-results {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	overflow: auto;
 
 	.browser {
 
@@ -117,6 +127,10 @@ module.exports = {
 
 		.report {
 			display: none;
+			
+			> .row {
+				margin: 0;
+			}
 
 			.block-of-test {
 				margin: 0 0 20px;
@@ -138,11 +152,12 @@ module.exports = {
 					}
 				}
 
-				.level {
-
+				.type {
+					font-size: 14px;
 				}
 
 				.message {
+					font-size: 14px;
 
 					pre {
 						white-space: pre-wrap;
