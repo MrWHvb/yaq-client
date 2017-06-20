@@ -69,6 +69,8 @@ class Tester {
                     logging: require('selenium-webdriver/lib/logging'),
                     until: require('selenium-webdriver/lib/until'),
                     WebElementPromise: webdriver.WebElementPromise,
+
+                    //arg time (1000 == 1 sec)
                     Sleep: {
                         sleep: function(time) {
                             var setTime = new Date().getTime();
@@ -79,6 +81,8 @@ class Tester {
                             }
                         }
                     },
+
+                    //arg url = link opens in new tab
                     Tab: {
                         openInNewTab: function(url) {
                             // var win = window.open(url);
