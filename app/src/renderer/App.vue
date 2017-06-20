@@ -24,19 +24,11 @@
 		</div>
 
 		<div id="middle-wrapper">
-			<div class="row">
-				<div class="cols s_24">
-					<router-view>qwdqwd</router-view>
-				</div>
-			</div>
+			<router-view>qwdqwd</router-view>
 		</div>
 
 		<div id="bottom-wrapper">
-			<div class="row">
-				<div class="cols s_24">
-					
-				</div>
-			</div>
+			<statusbar></statusbar>
 		</div>
 	</div>
 </template>
@@ -70,8 +62,16 @@ module.exports =  {
 						display: block;
 						text-decoration: none;
 						color: #000;
-						padding: 5px 10px;
+						padding: 10px 20px;
 						background-color: rgba(red, .1);
+						text-transform: uppercase;
+						font-size: 12px;
+						letter-spacing: 1px;
+						transition: all 300ms ease 0ms;
+						
+						&:hover {
+							background-color: rgba(red, .17);
+						}
 
 						&.router-link-exact-active {
 							font-weight: 700;
