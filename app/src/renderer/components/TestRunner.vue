@@ -44,7 +44,9 @@
 
 		<div class="row">
 			<div class="cols s_24">
-				<test-results></test-results>
+				<div style="position: relative">
+					<test-results></test-results>
+				</div>
 			</div>
 		</div>
 	</div>

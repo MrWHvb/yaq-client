@@ -1,11 +1,13 @@
 <template lang="html">
 	<div id="history">
-		<div class="wrapper">
-			<div class="left">
-				<test-results></test-results>
+		<div class="row">
+			<div class="cols s_18">
+				<div class="results">
+					<test-results></test-results>
+				</div>
 			</div>
-
-			<div class="right">
+			
+			<div class="cols s_6">
 				<reports-list></reports-list>
 			</div>
 		</div>
@@ -29,19 +31,16 @@ module.exports = {
 
 <style lang="scss">
 #history {
-	max-width: 100%;
-
-	.wrapper {
+	width: 100%;
+	display: flex;
+	
+	> .row > .cols {
 		display: flex;
-
-		.left {
-			flex: 1 1 auto;
-			padding: 0 20px 0 0;
-		}
-
-		.right {
-			flex: 0 0 300px;
-			background-color: rgba(yellow, .2);
+		
+		.results {
+			background-color: rgba(blue, .1);
+			width: 100%;
+			position: relative;
 		}
 	}
 }
