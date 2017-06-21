@@ -38,6 +38,8 @@ require("brace/ext/language_tools");
 require("brace/ext/searchbox");
 // console.log(ace);
 
+let editor;
+
 module.exports = {
 	data() {
 		return {
@@ -95,6 +97,16 @@ module.exports = {
 		}
 	},
 	
+	beforeRouteLeave(to, from, next) {
+		// console.log(to, from, next);
+		
+		let pos = editor.getCursorPosition();
+		// console.log(pos);
+		this.$store.commit('setCursorPosition', pos);
+		
+		next();
+	},
+	
 	mounted() {
 		let h = this.$el.clientHeight;
 		// console.log(h);
@@ -102,10 +114,10 @@ module.exports = {
 		let c = this.$el.querySelector('.controls').clientHeight;
 		
 		// console.dir(c);
-		console.log(`${h - (c + 40)}px`);
+		// console.log(`${h - (c + 40)}px`);
 		this.$el.querySelector('.code-editor').style.height = `${h - (c + 20)}px`;
 		
-		var editor = ace.edit("ace");
+		editor = ace.edit("ace");
 		
 		editor.$blockScrolling = Infinity;
 		
@@ -133,6 +145,7 @@ module.exports = {
 		editor.getSession().setMode("ace/mode/javascript");
 		editor.setTheme("ace/theme/monokai");
 		editor.setFontSize(14);
+		
 		editor.commands.addCommand({
 			name: 'saveFile',
 			bindKey: {
@@ -155,7 +168,11 @@ module.exports = {
 		
 		editor.setValue(this.code);
 		
-		// editor.resize();
+		let coords = this.$store.getters.getCursorPosition;
+		// console.log(this);
+		
+		editor.gotoLine(coords.row + 1, coords.column);
+		editor.focus();
 	}
 }
 </script>
