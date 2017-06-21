@@ -101,7 +101,7 @@ module.exports = {
 		// console.log(to, from, next);
 		
 		let pos = editor.getCursorPosition();
-		console.log(pos);
+		// console.log(pos);
 		this.$store.commit('setCursorPosition', pos);
 		
 		next();
