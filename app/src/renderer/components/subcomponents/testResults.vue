@@ -1,5 +1,29 @@
 <template lang="html">
 	<div class="test-results">
+		
+		<div class="filter">
+			<ul>
+				<li>
+					<label>
+						<input type="checkbox" v-model='logs.all'>
+						<span>all</span>
+					</label>
+				</li>
+				<li>
+					<label>
+						<input type="checkbox" v-model='logs.info'>
+						<span>info</span>
+					</label>
+				</li>
+				<li>
+					<label>
+						<input type="checkbox" v-model='logs.warning'>
+						<span>warning</span>
+					</label>
+				</li>
+			</ul>
+		</div>
+		
 		<div class="browser" v-for='(browser, k) in results'>
 			<input type="checkbox" :id='`browser-${k}`'>
 			<div class="name">
@@ -14,14 +38,17 @@
 			<div class="report">
 				<div class="row">
 					<div v-for='(block, i) in browser.report' :class='className(browser.report[i], browser.report[i-1])'>
-						<div class="block-of-test" :tpl='block.level.toLowerCase()'>
-							<div class="timestamp"> 
-								{{time1(block.timestamp)}}
-								<b>({{time2(block.timestamp)}})</b>
+						<!-- <template v-show='logs.all || (logs.info && block.level.toLowerCase() == "info") || (logs.warning && block.level.toLowerCase() == "warning")'> -->
+						<template>
+							<div class="block-of-test" :tpl='block.level.toLowerCase()'>
+								<div class="timestamp"> 
+									{{time1(block.timestamp)}}
+									<b>({{time2(block.timestamp)}})</b>
+								</div>
+								<div class="type">Level: {{block.level}}</div>
+								<div class="message"><pre>{{block.message}}</pre></div>
 							</div>
-							<div class="type">Level: {{block.level}}</div>
-							<div class="message"><pre>{{block.message}}</pre></div>
-						</div>
+						</template>
 					</div>
 				</div>
 			</div>
@@ -35,6 +62,11 @@ const moment = require('moment');
 module.exports = {
 	data() {
 		return {
+			logs: {
+				all: false,
+				info: false,
+				warning: true
+			},
 			results: null
 		}
 	},
@@ -62,11 +94,38 @@ module.exports = {
 		this.$options.sockets['yaq.server:show-test-report'] = object => {
 			this.results = object;
 		}
+	},
+	
+	watch: {
+		'logs.all'() {
+			if(this.logs.all) {
+				this.logs.info = true;
+				this.logs.warning = true;
+			}
+		},
+		'logs.info'() {
+			if(this.logs.info && this.logs.warning) {
+				this.logs.all = true;
+			}
+			else {
+				this.logs.all = false;
+			}
+		},
+		'logs.warning'() {
+			if(this.logs.info && this.logs.warning) {
+				this.logs.all = true;
+			}
+			else {
+				this.logs.all = false;
+			}
+		}
 	}
 }
 </script>
 
 <style lang="scss">
+@import "../../../scss/wanted";
+
 .test-results {
 	position: absolute;
 	top: 0;
@@ -74,6 +133,40 @@ module.exports = {
 	bottom: 0;
 	left: 0;
 	overflow: auto;
+	
+	.filter {
+		
+		ul {
+			display: flex;
+			
+			li {
+				margin: 0 10px 10px 0;
+				
+				label {
+					cursor: pointer;
+					
+					input {
+						display: none;
+						
+						&:checked + span {
+							background-color: rgba(red, .5);
+						}
+					}
+					
+					span {
+						display: block;
+						padding: 10px;
+						background-color: rgba(red, .1);
+						@include single-transition;
+						
+						&:hover {
+							background-color: rgba(red, .2);
+						}
+					}
+				}
+			}
+		}
+	}
 
 	.browser {
 
