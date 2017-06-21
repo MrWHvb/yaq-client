@@ -35,6 +35,7 @@ const ace = require('brace');
 require('brace/mode/javascript');
 require('brace/theme/monokai');
 require("brace/ext/language_tools");
+require("brace/ext/searchbox");
 // console.log(ace);
 
 module.exports = {
