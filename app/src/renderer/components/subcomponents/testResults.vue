@@ -36,29 +36,37 @@
 			</div>
 
 			<div class="report">
-				<div class="row">
-					<div v-for='(block, i) in browser.report' :class='className(browser.report[i], browser.report[i-1])'>
-						<!-- <template v-show='logs.all || (logs.info && block.level.toLowerCase() == "info") || (logs.warning && block.level.toLowerCase() == "warning")'> -->
-						<template>
-							<div class="block-of-test" :tpl='block.level.toLowerCase()'>
-								<div class="timestamp"> 
-									{{time1(block.timestamp)}}
-									<b>({{time2(block.timestamp)}})</b>
-								</div>
-								<div class="type">Level: {{block.level}}</div>
-								<div class="message"><pre>{{block.message}}</pre></div>
-							</div>
+				<!-- {{browser}} -->
+				
+				<template v-if='!browser.report'>
+					Nothing to show.
+				</template>
+				
+				<template v-else>
+					<div class="row">
+						<template v-for='(block, i) in browser.report'>
+							<!-- <pre>{{block}}</pre> -->
+							
+							<template v-if='logs.all'>
+								<result-item :list='browser' :item='block' :iterator='i'></result-item>
+							</template>
+							
+							<template v-if='!logs.all && logs.info && block.level.toLowerCase() == "info"'>
+								<result-item :list='browser' :item='block' :iterator='i'></result-item>
+							</template>
+							
+							<template v-if='!logs.all && logs.warning && block.level.toLowerCase() == "warning"'>
+								<result-item :list='browser' :item='block' :iterator='i'></result-item>
+							</template>
 						</template>
 					</div>
-				</div>
+				</template>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
-const moment = require('moment');
-
 module.exports = {
 	data() {
 		return {
@@ -71,23 +79,8 @@ module.exports = {
 		}
 	},
 
-	methods: {
-		time1(ms) {
-			return moment(ms).format('HH:mm:ss');
-		},
-		time2(ms) {
-			return moment(ms).format('dddd, DD.MM.YYYY');
-		},
-		
-		className(block1, block2) {
-			if(block2) {
-				// console.log(block);
-				if(block1.level == "WARNING" && block2.level == "WARNING") return "cols s_24";
-				else return "cols s_12"
-			}
-			return "cols s_12"
-			// (browser.report[i-1] ? browser.report[i-1].level : false) == "WARNING" ? "cols s_24" : "cols s_12"
-		}
+	components: {
+		'result-item': require('./items/result-item.vue')
 	},
 
 	mounted() {

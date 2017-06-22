@@ -22,7 +22,11 @@ module.exports = new Vuex.Store({
 			}
 		},
 
-		allAvailableTests: []
+		allAvailableTests: [],
+		
+		statusbar: {
+			
+		}
 	},
 	
 	getters: {
