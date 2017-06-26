@@ -1,7 +1,7 @@
 <template>
 	<div id="body">
 		<div id="top-wrapper">
-			<div class="row">
+			<!-- <div class="row">
 				<div class="cols s_24">
 					<nav class='main-navigation'>
 						<ul>
@@ -20,7 +20,7 @@
 						</ul>
 					</nav>
 				</div>
-			</div>
+			</div> -->
 		</div>
 
 		<div id="middle-wrapper">
@@ -39,11 +39,22 @@ require('../scss/text.scss');
 require('../scss/fonts.scss');
 require('../scss/awesome.scss');
 
+const ipcRenderer = require('electron').ipcRenderer;
+
 module.exports =  {
 	store: require('./vuex/store.js'),
 	
 	components: {
 		statusbar: require('./components/Statusbar.vue')
+	},
+	
+	mounted() {
+		ipcRenderer.on('vue-router:goto', (e, payload) => {
+			console.log(payload);
+			console.log(this);
+			
+			this.$router.push(payload)
+		})
 	}
 }
 </script>

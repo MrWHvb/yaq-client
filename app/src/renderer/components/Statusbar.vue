@@ -1,6 +1,10 @@
 <template lang="html">
 	<div id="status-bar">
-		status bar
+		<div class="row">
+			<div class="cols s_24">
+				status bar
+			</div>
+		</div>
 	</div>
 </template>
 
