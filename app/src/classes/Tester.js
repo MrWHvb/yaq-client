@@ -66,8 +66,12 @@ class Tester {
                     webdriver,
                     // report,
                     stack: null,
+                    request: require('selenium-webdriver/http'),
+                    HttpClient: require('selenium-webdriver/http'),
                     logging: require('selenium-webdriver/lib/logging'),
                     until: require('selenium-webdriver/lib/until'),
+                    http: require('selenium-webdriver/http/util'),
+                    session: require('selenium-webdriver/lib/session'),
                     WebElementPromise: webdriver.WebElementPromise,
 
                     //arg time (1000 == 1 sec)
@@ -93,7 +97,8 @@ class Tester {
                             //window.focus();
 
                         }
-                    }
+                    },
+
                 }
 
 
