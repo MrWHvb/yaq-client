@@ -6,8 +6,8 @@ import {
 	Menu
 } from 'electron';
 
-// const Tester = require('../classes/Tester.js');
-// const tester = new Tester();
+const Tester = require('../classes/Tester.js');
+const tester = new Tester();
 
 let mainWindow;
 
@@ -67,7 +67,7 @@ function createWindow () {
 	// eslint-disable-next-line no-console
 	console.log('mainWindow opened')
 
-	// tester.runTestServer(); // запускаєм сервер селеніума
+	tester.runTestServer(); // запускаєм сервер селеніума
 }
 
 app.on('ready', createWindow)

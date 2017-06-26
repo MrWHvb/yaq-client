@@ -111,6 +111,7 @@ module.exports = {
 				}
 				else {
 					let test = new Tester();
+					console.log(test);
 
 					test.run({name: this.testName, code: this.testCode}, this.browsers, testreport => {
 						this.$socket.emit('yaq.client:finished-test', testreport);
